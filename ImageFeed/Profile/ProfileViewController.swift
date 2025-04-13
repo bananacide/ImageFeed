@@ -94,14 +94,4 @@ final class ProfileViewController: UIViewController {
 
         return button
     }
-    
-}
-
-// я решил сдеалть это через расгирение, в будущем можно будет вынести его отдельно и использовать и для второго экрана когда будет верстать все приложение кодом
-extension UILabel {
-    func setupLabel(text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor) {
-        self.text = text
-        self.font = UIFont.systemFont(ofSize: size, weight: weight)
-        self.textColor = color
-    }
 }
