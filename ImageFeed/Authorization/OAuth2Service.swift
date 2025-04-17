@@ -30,7 +30,10 @@ final class OAuth2Service {
     }
 
     func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        guard let baseURL = URL(string: "https://unsplash.com") else { return nil }
+        guard let baseURL = URL(string: "https://unsplash.com") else {
+            print("Ошибка: не удалось создать baseURL")
+            return nil
+        }
 
         var urlComponents = URLComponents()
         urlComponents.path = "/oauth/token"
@@ -42,7 +45,10 @@ final class OAuth2Service {
             URLQueryItem(name: "grant_type", value: "authorization_code")
         ]
 
-        guard let url = urlComponents.url(relativeTo: baseURL) else { return nil }
+        guard let url = urlComponents.url(relativeTo: baseURL) else {
+            print("Ошибка: не удалось создать окончательный URL из urlComponents")
+            return nil
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -61,7 +67,7 @@ final class OAuth2Service {
                 do {
                     let decoded = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     let token = decoded.accessToken
-                    OAuth2TokenStorage.shared.token = token // исправленное сохранение
+                    OAuth2TokenStorage.shared.token = token
                     completion(.success(token))
                 } catch {
                     print("Ошибка декодирования: \(error)")
@@ -69,8 +75,20 @@ final class OAuth2Service {
                 }
 
             case .failure(let error):
-                print("Ошибка сети: \(error)")
+                if let networkError = error as? NetworkError {
+                    switch networkError {
+                    case .httpStatusCode(let code):
+                        print("Ошибка: сервер вернул статус код \(code)")
+                    case .urlRequestError(let requestError):
+                        print("Ошибка запроса: \(requestError)")
+                    case .urlSessionError:
+                        print("Неизвестная ошибка URLSession")
+                    }
+                } else {
+                    print("Неизвестная ошибка сети: \(error)")
+                }
                 completion(.failure(error))
+
             }
         }
         task.resume()

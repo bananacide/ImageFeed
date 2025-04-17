@@ -78,7 +78,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
             switch result {
             case .success(let token):
                 print("Успешно получен токен: \(token)")
-                self?.authenticateUser(withCode: token) // передача успешного результата
+                self?.authenticateUser(withCode: token)
             case .failure(let error):
                 print("Ошибка при получении токена: \(error.localizedDescription)")
             }
