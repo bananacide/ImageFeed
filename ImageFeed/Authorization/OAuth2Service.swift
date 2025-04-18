@@ -8,7 +8,7 @@
 import UIKit
 
 final class OAuth2Service {
-    
+
     static let shared = OAuth2Service()
     private init() {}
 
@@ -46,7 +46,7 @@ final class OAuth2Service {
         ]
 
         guard let url = urlComponents.url(relativeTo: baseURL) else {
-            print("Ошибка: не удалось создать окончательный URL из urlComponents")
+            print("Ошибка: не удалось создать URL из компонентов: \(urlComponents)")
             return nil
         }
 
@@ -77,8 +77,13 @@ final class OAuth2Service {
             case .failure(let error):
                 if let networkError = error as? NetworkError {
                     switch networkError {
-                    case .httpStatusCode(let code):
-                        print("Ошибка: сервер вернул статус код \(code)")
+                    case .httpStatusCode(let code, let data):
+                        print("Ошибка: сервер вернул статус-код \(code)")
+                        if let data = data, let errorString = String(data: data, encoding: .utf8) {
+                            print("Ответ сервера:\n\(errorString)")
+                        } else {
+                            print("Ответ сервера пустой или не удалось декодировать")
+                        }
                     case .urlRequestError(let requestError):
                         print("Ошибка запроса: \(requestError)")
                     case .urlSessionError:
@@ -88,7 +93,6 @@ final class OAuth2Service {
                     print("Неизвестная ошибка сети: \(error)")
                 }
                 completion(.failure(error))
-
             }
         }
         task.resume()

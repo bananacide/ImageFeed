@@ -32,7 +32,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
     
     private func setupIconUnsplash() {
         let icon = UIImageView()
-        icon.image = UIImage(named: "icon_unsplash")
+        icon.image = UIImage(named: "icon_Unsplash")
         
         view.addSubview(icon)
         
