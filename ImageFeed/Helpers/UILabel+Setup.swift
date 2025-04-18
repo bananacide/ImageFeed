@@ -12,5 +12,6 @@ extension UILabel {
         self.text = text
         self.font = UIFont.systemFont(ofSize: size, weight: weight)
         self.textColor = color
+        self.translatesAutoresizingMaskIntoConstraints = false
     }
 }

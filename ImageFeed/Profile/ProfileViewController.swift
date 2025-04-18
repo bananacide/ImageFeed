@@ -9,12 +9,17 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    private let namelabel = UILabel()
+    private let loginNamelabel = UILabel()
+    private let descriptionlabel = UILabel()
+    private let avatar = UIImageView()
+    private let exitButton = UIButton()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
         createProfile()
     }
-    
     
     private func createProfile() {
         let avaterAndExitButtonStack = avaterAndExitButtonStack()
@@ -36,10 +41,10 @@ final class ProfileViewController: UIViewController {
     }
     
     private func avaterAndExitButtonStack() -> UIStackView {
-        let avatar = setupImageView()
-        let button = setupButton()
+        setupAvatar()
+        exitButton.setupButtonWithImage(image: "button_exit")
                 
-        let stackView = UIStackView(arrangedSubviews: [avatar, button])
+        let stackView = UIStackView(arrangedSubviews: [avatar, exitButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalSpacing
@@ -49,21 +54,16 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             avatar.heightAnchor.constraint(equalToConstant: 70),
             avatar.widthAnchor.constraint(equalToConstant: 70),
-            button.heightAnchor.constraint(equalToConstant: 44),
-            button.widthAnchor.constraint(equalToConstant: 44)
+            exitButton.heightAnchor.constraint(equalToConstant: 44),
+            exitButton.widthAnchor.constraint(equalToConstant: 44)
         ])
         
         return stackView
     }
     
     private func labelsStack() -> UIStackView {
-        let namelabel = UILabel()
         namelabel.setupLabel(text: "Екатерина Новикова", size: 23, weight: .bold, color: .ypWhite)
-        
-        let loginNamelabel = UILabel()
         loginNamelabel.setupLabel(text: "@ekaterina_nov", size: 13, weight: .regular, color: .ypGray)
-        
-        let descriptionlabel = UILabel()
         descriptionlabel.setupLabel(text: "Hello, world!", size: 13, weight: .regular, color: .ypWhite)
         
         let stackView = UIStackView(arrangedSubviews: [namelabel, loginNamelabel, descriptionlabel])
@@ -75,23 +75,9 @@ final class ProfileViewController: UIViewController {
         return stackView
     }
     
-    private func setupImageView() -> UIImageView {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "User_pic")
-        imageView.contentMode = .scaleAspectFit
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        return imageView
-    }
-    
-    private func setupButton() -> UIButton {
-        let button = UIButton()
-        button.tintColor = .ypWhite
-        button.setImage(UIImage(named: "button_exit"), for: .normal)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        return button
+    private func setupAvatar() {
+        avatar.image = UIImage(named: "User_pic")
+        avatar.contentMode = .scaleAspectFit
+        avatar.translatesAutoresizingMaskIntoConstraints = false
     }
 }
